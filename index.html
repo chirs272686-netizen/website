@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title id="meta-title">張晴宇 (Chang Ching-Yu) • Student Bento Profile</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <!-- Phosphor Icons CDN -->
+  <link href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css" rel="stylesheet" type="text/css"/>
+  <link href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/bold/style.css" rel="stylesheet" type="text/css"/>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['-apple-system', 'BlinkMacSystemFont', '"SF Pro Display"', '"SF Pro Text"', 'Inter', 'system-ui', 'sans-serif'],
+          },
+          colors: {
+            apple: {
+              canvas: '#F8FAFC',
+              card: '#FFFFFF',
+              subtle: '#F1F5F9',
+              border: 'rgba(0, 0, 0, 0.06)',
+              dark: '#0F172A',
+              muted: '#64748B',
+              blue: '#0071E3',
+            }
+          },
+          boxShadow: {
+            'cupertino': '0 20px 40px -15px rgba(0, 0, 0, 0.05), 0 0 1px 1px rgba(0, 0, 0, 0.04)',
+            'subtle-tile': '0 2px 8px -2px rgba(0, 0, 0, 0.03), 0 0 0 1px rgba(0, 0, 0, 0.04)',
+            'drawer': '-16px 0 40px rgba(0, 0, 0, 0.12), 0 0 1px 1px rgba(0, 0, 0, 0.05)',
+            'pressed': 'inset 0 1px 2px rgba(0, 0, 0, 0.06)'
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* Cupertino Smooth Backdrop Filter & Micro-interactions */
+    .frosted-glass {
+      background: rgba(248, 250, 252, 0.72);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+    .frosted-sheet {
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
+    }
+    .dark .frosted-glass {
+      background: rgba(30, 41, 59, 0.72);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-color: rgba(255, 255, 255, 0.08);
+    }
+    .dark .frosted-sheet {
+      background: rgba(15, 23, 42, 0.88);
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
+      border-color: rgba(255, 255, 255, 0.08);
+    }
+    .badge-pill {
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .badge-pill:hover {
+      transform: translateY(-1px);
+    }
+    .bento-tile {
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .bento-tile:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 24px -10px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.06);
+    }
+    .dark .bento-tile:hover {
+      box-shadow: 0 12px 24px -10px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1);
+    }
+    /* Cupertino Drawer Animation */
+    #project-drawer {
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    #drawer-backdrop {
+      transition: opacity 0.35s ease, backdrop-filter 0.35s ease;
+    }
+    .drawer-open #drawer-backdrop {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .drawer-open #project-drawer {
+      transform: translateX(0);
+    }
+    /* Scrollbar styling */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+  <script>
+    // Prevent FOUC (Flash of Unstyled Content) for Dark Mode
+    if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  </script>
+</head>
+<body class="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 font-sans flex items-center justify-center p-6 md:p-12 antialiased selection:bg-slate-200 dark:selection:bg-slate-700 selection:text-slate-900 dark:selection:text-white relative transition-colors duration-300">
+
+  <!-- Floating Cupertino Theme & Language Control Pill -->
+  <header class="fixed top-4 right-4 z-40 flex items-center gap-2 p-1.5 rounded-full bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border border-black/5 dark:border-white/10 shadow-cupertino dark:shadow-[0_4px_20px_rgba(0,0,0,0.3)] transition-all duration-200" id="controls-bar">
+    <!-- Segmented Language Pill -->
+    <div class="flex items-center bg-slate-100/90 dark:bg-slate-800/90 rounded-full p-0.5 text-xs font-semibold" role="group" aria-label="Language selection">
+      <button id="lang-zh-btn" onclick="setLanguage('zh')" class="px-2.5 py-1 rounded-full transition-all duration-200 text-slate-900 dark:text-white bg-white dark:bg-slate-700 shadow-2xs font-bold" type="button">中</button>
+      <button id="lang-en-btn" onclick="setLanguage('en')" class="px-2.5 py-1 rounded-full transition-all duration-200 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white font-medium" type="button">EN</button>
+    </div>
+    <div class="w-px h-4 bg-slate-200 dark:bg-slate-700"></div>
+    <!-- Theme Toggle Button -->
+    <button id="theme-toggle-btn" onclick="toggleDarkMode()" class="w-8 h-8 rounded-full flex items-center justify-center text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white transition-all duration-200 focus:outline-none" title="Toggle Dark / Light Mode" type="button" aria-label="Toggle theme">
+      <i id="theme-icon" class="ph ph-moon text-base"></i>
+    </button>
+  </header>
+
+  <!-- Main Bento Outer Frame -->
+  <main class="w-full max-w-4xl bg-white dark:bg-slate-900 rounded-[2.5rem] border border-black/5 dark:border-white/10 shadow-cupertino dark:shadow-[0_20px_50px_-15px_rgba(0,0,0,0.6)] p-8 md:p-11 relative overflow-hidden transition-all duration-300">
+    <!-- Cupertino Decorative Ambient Gradient Light in Background -->
+    <div class="absolute -top-32 -right-32 w-80 h-80 bg-blue-50/40 dark:bg-blue-600/10 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="absolute -bottom-32 -left-32 w-80 h-80 bg-slate-100/60 dark:bg-indigo-600/10 rounded-full blur-3xl pointer-events-none"></div>
+
+    <div class="relative z-10 flex flex-col gap-8">
+      <!-- Top Section: 2 Columns Bento Layout -->
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
+        <!-- Left Column: Portrait, Status, Contact Meta (md:col-span-5) -->
+        <div class="md:col-span-5 flex flex-col gap-4">
+          <!-- Portrait Container -->
+          <div class="relative w-full aspect-square rounded-[2rem] overflow-hidden bg-slate-100 dark:bg-slate-800 border border-black/5 dark:border-white/10 shadow-sm group">
+            <img alt="Student Portrait" class="w-full h-full object-cover object-top transition duration-700 ease-out group-hover:scale-105" src="./avatar.jpg"/>
+            <!-- Ambient Inner Ring -->
+            <div class="absolute inset-0 rounded-[2rem] ring-1 ring-inset ring-black/5 dark:ring-white/10 pointer-events-none"></div>
+          </div>
+
+          <!-- Minimalist Status Indicator Card -->
+          <div class="bg-slate-50/90 dark:bg-slate-800/80 rounded-2xl p-3.5 border border-black/5 dark:border-white/5 flex items-center justify-between text-xs font-medium text-slate-600 dark:text-slate-300 transition-colors">
+            <div class="flex items-center gap-2">
+              <span class="relative flex h-2 w-2">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+              </span>
+              <span class="tracking-tight text-slate-700 dark:text-slate-200 font-medium" id="status-text">學習 • 開發 • 實踐</span>
+            </div>
+            <span class="text-[10px] text-slate-400 dark:text-slate-400 uppercase tracking-widest font-semibold" id="status-badge">在線</span>
+          </div>
+
+          <!-- Location & Direct Info Pills -->
+          <div class="flex flex-col gap-2">
+            <!-- Location -->
+            <div class="flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl bg-slate-50/60 dark:bg-slate-800/50 border border-black/[0.04] dark:border-white/5 text-xs text-slate-600 dark:text-slate-300 transition-colors">
+              <i class="ph ph-map-pin text-sm text-slate-500 dark:text-slate-400"></i>
+              <span class="font-normal text-slate-700 dark:text-slate-200" id="location-text">台灣高雄 • 國立中山大學</span>
+            </div>
+
+            <!-- Interactive Clipboard-ready Email Pill -->
+            <button class="group flex items-center justify-between px-3.5 py-2.5 rounded-xl bg-slate-50/90 dark:bg-slate-800/80 hover:bg-slate-100/90 dark:hover:bg-slate-750 border border-black/[0.05] dark:border-white/5 text-xs text-slate-600 dark:text-slate-300 transition-all duration-200 active:scale-[0.99] text-left" id="copy-email-btn" onclick="copyEmail()" title="Click to copy email address">
+              <div class="flex items-center gap-2.5 truncate">
+                <i class="ph ph-envelope-simple text-sm text-slate-500 dark:text-slate-400 group-hover:text-slate-900 dark:group-hover:text-white transition-colors"></i>
+                <span class="font-mono text-slate-700 dark:text-slate-200 group-hover:text-slate-900 dark:group-hover:text-white text-[11px] truncate" id="email-text">chirs272686@gmail.com</span>
+              </div>
+              <span class="flex items-center gap-1 text-[11px] font-medium text-slate-500 dark:text-slate-400 group-hover:text-slate-800 dark:group-hover:text-slate-200 transition-colors shrink-0 ml-2" id="copy-status">
+                <i class="ph ph-copy text-xs"></i>
+                <span id="copy-label">複製</span>
+              </span>
+            </button>
+
+            <!-- Interactive Clipboard-ready Phone Pill -->
+            <button class="group flex items-center justify-between px-3.5 py-2.5 rounded-xl bg-slate-50/90 dark:bg-slate-800/80 hover:bg-slate-100/90 dark:hover:bg-slate-750 border border-black/[0.05] dark:border-white/5 text-xs text-slate-600 dark:text-slate-300 transition-all duration-200 active:scale-[0.99] text-left" id="copy-phone-btn" onclick="copyPhone()" title="Click to copy phone number">
+              <div class="flex items-center gap-2.5 truncate">
+                <svg class="w-3.5 h-3.5 text-slate-500 dark:text-slate-400 group-hover:text-slate-900 dark:group-hover:text-white transition-colors shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                <span class="font-mono text-slate-700 dark:text-slate-200 group-hover:text-slate-900 dark:group-hover:text-white text-[11px] truncate" id="phone-text">0902121585</span>
+              </div>
+              <span class="flex items-center gap-1 text-[11px] font-medium text-slate-500 dark:text-slate-400 group-hover:text-slate-800 dark:group-hover:text-slate-200 transition-colors shrink-0 ml-2" id="copy-phone-status">
+                <i class="ph ph-copy text-xs"></i>
+                <span id="copy-phone-label">複製</span>
+              </span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Right Column: Header, Elevator Pitch, Frosted Callout, Skills & Socials (md:col-span-7) -->
+        <div class="md:col-span-7 flex flex-col justify-between h-full gap-5">
+          <!-- Top Row: Student Identity & Action Buttons -->
+          <div>
+            <div class="flex items-start justify-between gap-4">
+              <div>
+                <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-100/80 dark:bg-slate-800/80 border border-black/5 dark:border-white/10 text-[11px] font-medium text-slate-600 dark:text-slate-300 mb-2.5">
+                  <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
+                  <span id="badge-class-year">碩士班 2026</span>
+                </div>
+                <h1 class="text-3xl md:text-4xl font-bold tracking-tight text-slate-900 dark:text-white flex items-baseline gap-2.5 flex-wrap">
+                  <span id="name-zh">張晴宇</span>
+                  <span class="text-xl md:text-2xl font-normal text-slate-400 dark:text-slate-400" id="name-en">Chang Ching-Yu</span>
+                </h1>
+                <p class="text-sm font-medium text-slate-500 dark:text-slate-400 mt-1" id="major-title">
+                  醫學科技所 • 生物資訊與計算
+                </p>
+              </div>
+
+              <!-- Action Buttons: Featured Projects Drawer Trigger + Get in Touch -->
+              <div class="flex items-center gap-2 shrink-0">
+                <button class="badge-pill inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-slate-200/90 dark:hover:bg-slate-700/90 text-slate-800 dark:text-slate-200 text-xs font-semibold border border-black/5 dark:border-white/10 transition-all shadow-2xs" onclick="openDrawer()" title="Open Featured Projects Preview" type="button">
+                  <i class="ph ph-browsers text-xs text-blue-600 dark:text-blue-400"></i>
+                  <span id="btn-projects">精選專案</span>
+                  <span class="inline-flex items-center justify-center text-[10px] w-4 h-4 rounded-full bg-blue-100 dark:bg-blue-900/60 text-blue-700 dark:text-blue-300 font-bold ml-0.5">1</span>
+                </button>
+                <a class="badge-pill inline-flex items-center gap-2 px-4 py-2 rounded-full bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-xs font-semibold hover:bg-slate-800 dark:hover:bg-slate-100 transition-colors shadow-sm" href="mailto:chirs272686@gmail.com">
+                  <span id="btn-contact">聯絡我</span>
+                  <i class="ph ph-arrow-up-right text-xs"></i>
+                </a>
+              </div>
+            </div>
+
+            <!-- Concise Elevator Pitch -->
+            <p class="text-sm leading-relaxed text-slate-600 dark:text-slate-300 mt-4 font-normal" id="elevator-pitch">
+              從醫學檢驗跨域走入計算生物學。具備次世代定序（NGS）生醫資訊專案實戰經驗，目前全力自學鍛鍊資訊工程底層基礎，致力將生物數據轉化為真正落地可用的分析工具與平台。
+            </p>
+          </div>
+
+          <!-- Frosted Glass Callout Box for Core Focus -->
+          <div class="frosted-glass rounded-2xl p-4 border border-black/5 dark:border-white/10 flex items-start gap-3.5 shadow-sm">
+            <div class="w-8 h-8 rounded-xl bg-slate-900 dark:bg-blue-600 text-white flex items-center justify-center shrink-0 mt-0.5">
+              <i class="ph ph-sparkle text-base"></i>
+            </div>
+            <div class="space-y-0.5">
+              <h3 class="text-xs font-semibold tracking-tight text-slate-900 dark:text-white uppercase" id="focus-title">核心學術與技術方向</h3>
+              <p class="text-xs leading-relaxed text-slate-600 dark:text-slate-300" id="focus-desc">
+                蛋白質結構預測、微生物分類鑑定平台、抗藥性基因分析、網頁式生物資訊分析工具開發。
+              </p>
+            </div>
+          </div>
+
+          <!-- Clean Skill Capsules -->
+          <div class="space-y-2">
+            <span class="text-[11px] font-medium tracking-wide uppercase text-slate-400 dark:text-slate-400" id="skills-heading">核心專業與技能標籤</span>
+            <div class="flex flex-wrap gap-1.5">
+              <span class="badge-pill inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-slate-100/90 dark:bg-slate-800/80 text-slate-700 dark:text-slate-300 border border-black/[0.04] dark:border-white/5">
+                #NGSBioinformatics
+              </span>
+              <span class="badge-pill inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-slate-100/90 dark:bg-slate-800/80 text-slate-700 dark:text-slate-300 border border-black/[0.04] dark:border-white/5">
+                #Python
+              </span>
+              <span class="badge-pill inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-slate-100/90 dark:bg-slate-800/80 text-slate-700 dark:text-slate-300 border border-black/[0.04] dark:border-white/5">
+                #WebDevelopment
+              </span>
+              <span class="badge-pill inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-slate-100/90 dark:bg-slate-800/80 text-slate-700 dark:text-slate-300 border border-black/[0.04] dark:border-white/5">
+                #DataAnalysis
+              </span>
+              <span class="badge-pill inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-slate-100/90 dark:bg-slate-800/80 text-slate-700 dark:text-slate-300 border border-black/[0.04] dark:border-white/5">
+                #FastLearner
+              </span>
+            </div>
+          </div>
+
+          <!-- Flat Static Social & Presence Icon Links -->
+          <div class="pt-2 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+            <span class="text-xs font-medium text-slate-400 dark:text-slate-400" id="connect-heading">社群與連結</span>
+            <div class="flex items-center gap-1.5">
+              <a class="w-8 h-8 rounded-full flex items-center justify-center text-slate-600 dark:text-slate-300 bg-slate-100/80 dark:bg-slate-800/80 hover:bg-slate-200 dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-white border border-black/[0.03] dark:border-white/5 transition-all" href="https://linkedin.com" rel="noreferrer" target="_blank" title="LinkedIn">
+                <i class="ph ph-linkedin-logo text-sm"></i>
+              </a>
+              <a class="w-8 h-8 rounded-full flex items-center justify-center text-slate-600 dark:text-slate-300 bg-slate-100/80 dark:bg-slate-800/80 hover:bg-slate-200 dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-white border border-black/[0.03] dark:border-white/5 transition-all" href="https://instagram.com" rel="noreferrer" target="_blank" title="Instagram">
+                <i class="ph ph-instagram-logo text-sm"></i>
+              </a>
+              <a class="w-8 h-8 rounded-full flex items-center justify-center text-slate-600 dark:text-slate-300 bg-slate-100/80 dark:bg-slate-800/80 hover:bg-slate-200 dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-white border border-black/[0.03] dark:border-white/5 transition-all" href="https://substack.com" rel="noreferrer" target="_blank" title="Substack">
+                <i class="ph ph-newspaper text-sm"></i>
+              </a>
+              <a class="w-8 h-8 rounded-full flex items-center justify-center text-slate-600 dark:text-slate-300 bg-slate-100/80 dark:bg-slate-800/80 hover:bg-slate-200 dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-white border border-black/[0.03] dark:border-white/5 transition-all" href="https://github.com" rel="noreferrer" target="_blank" title="Portfolio">
+                <i class="ph ph-globe text-sm"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Section: 4 Uniform Bento Stat Tiles -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3.5 pt-2">
+        <!-- Tile 1 -->
+        <div class="bento-tile bg-slate-50/80 dark:bg-slate-800/60 rounded-2xl p-4 border border-black/5 dark:border-white/5 flex flex-col justify-between">
+          <div class="w-7 h-7 rounded-lg bg-white dark:bg-slate-700 border border-black/5 dark:border-white/10 flex items-center justify-center text-slate-700 dark:text-slate-200 shadow-xs mb-3">
+            <i class="ph ph-flask text-xs font-bold"></i>
+          </div>
+          <div>
+            <div class="text-xl md:text-2xl font-bold tracking-tight text-slate-900 dark:text-white" id="stat1-val">5+2</div>
+            <div class="text-xs text-slate-500 dark:text-slate-400 font-medium tracking-tight mt-0.5" id="stat1-label">醫學檢驗背景歷練 (年)</div>
+          </div>
+        </div>
+
+        <!-- Tile 2: Interactive Featured Projects Trigger -->
+        <button class="bento-tile group relative text-left bg-gradient-to-b from-blue-50/60 to-slate-50/90 dark:from-blue-950/40 dark:to-slate-800/80 hover:from-blue-50/90 hover:to-slate-100/90 dark:hover:from-blue-900/40 dark:hover:to-slate-750 rounded-2xl p-4 border border-blue-200/60 dark:border-blue-500/30 hover:border-blue-400/80 dark:hover:border-blue-400/60 ring-1 ring-blue-500/10 dark:ring-blue-400/20 hover:ring-blue-500/30 flex flex-col justify-between transition-all cursor-pointer shadow-subtle-tile" onclick="openDrawer()" title="Click to view featured projects showcase" type="button">
+          <div class="flex items-center justify-between mb-3 w-full">
+            <div class="w-7 h-7 rounded-lg bg-white dark:bg-slate-700 border border-black/5 dark:border-white/10 group-hover:border-blue-200 dark:group-hover:border-blue-500/40 flex items-center justify-center text-blue-600 dark:text-blue-400 shadow-xs transition-colors">
+              <i class="ph ph-dna text-xs font-bold"></i>
+            </div>
+            <!-- Interactive Cupertino Micro Badge -->
+            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-blue-100/80 dark:bg-blue-900/60 text-blue-700 dark:text-blue-300 group-hover:bg-blue-600 group-hover:text-white transition-all text-[10px] font-semibold tracking-tight">
+              <span id="stat2-view-badge">查看</span>
+              <i class="ph ph-arrow-up-right text-[10px] group-hover:translate-x-0.5 transition-transform"></i>
+            </span>
+          </div>
+          <div>
+            <div class="flex items-baseline gap-1.5">
+              <span class="text-xl md:text-2xl font-bold tracking-tight text-slate-900 dark:text-white group-hover:text-blue-700 dark:group-hover:text-blue-400 transition-colors" id="stat2-val">1</span>
+              <span class="text-[10px] uppercase font-bold tracking-wider text-blue-600 dark:text-blue-300 bg-blue-50 dark:bg-blue-950/80 px-1 rounded border border-blue-100 dark:border-blue-800/60" id="stat2-featured-badge">精選</span>
+            </div>
+            <div class="text-xs text-slate-600 dark:text-slate-300 font-medium tracking-tight mt-0.5 group-hover:text-slate-900 dark:group-hover:text-white transition-colors" id="stat2-label">次世代定序生醫專案</div>
+          </div>
+        </button>
+
+        <!-- Tile 3 -->
+        <div class="bento-tile bg-slate-50/80 dark:bg-slate-800/60 rounded-2xl p-4 border border-black/5 dark:border-white/5 flex flex-col justify-between">
+          <div class="w-7 h-7 rounded-lg bg-white dark:bg-slate-700 border border-black/5 dark:border-white/10 flex items-center justify-center text-slate-700 dark:text-slate-200 shadow-xs mb-3">
+            <i class="ph ph-microscope text-xs font-bold"></i>
+          </div>
+          <div>
+            <div class="text-xl md:text-2xl font-bold tracking-tight text-slate-900 dark:text-white" id="stat3-val">2</div>
+            <div class="text-xs text-slate-500 dark:text-slate-400 font-medium tracking-tight mt-0.5" id="stat3-label">實驗室核心研究方向</div>
+          </div>
+        </div>
+
+        <!-- Tile 4 -->
+        <div class="bento-tile bg-slate-50/80 dark:bg-slate-800/60 rounded-2xl p-4 border border-black/5 dark:border-white/5 flex flex-col justify-between">
+          <div class="w-7 h-7 rounded-lg bg-white dark:bg-slate-700 border border-black/5 dark:border-white/10 flex items-center justify-center text-slate-700 dark:text-slate-200 shadow-xs mb-3">
+            <i class="ph ph-code text-xs font-bold"></i>
+          </div>
+          <div>
+            <div class="text-xl md:text-2xl font-bold tracking-tight text-slate-900 dark:text-white" id="stat4-val">0→1</div>
+            <div class="text-xs text-slate-500 dark:text-slate-400 font-medium tracking-tight mt-0.5" id="stat4-label">程式自學從零到一</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Micro Footer / GitHub Pages signature -->
+      <footer class="flex items-center justify-between text-[11px] text-slate-400 dark:text-slate-500 pt-2 border-t border-slate-100/80 dark:border-slate-800">
+        <div class="flex items-center gap-1.5">
+          <i class="ph ph-shield-check text-xs text-emerald-600 dark:text-emerald-500"></i>
+          <span id="footer-verified">學生個人作品集 • 託管於 GitHub Pages</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <span id="footer-principles">依據 Cupertino 蘋果設計規範打造</span>
+        </div>
+      </footer>
+    </div>
+  </main>
+
+  <!-- Cupertino Sheet Modal & Drawer Component -->
+  <div class="fixed inset-0 z-50 pointer-events-none transition-all duration-300" id="drawer-container">
+    <!-- Backdrop Blur with Tint -->
+    <div aria-hidden="true" class="absolute inset-0 bg-slate-900/40 dark:bg-black/60 backdrop-blur-md opacity-0 pointer-events-none transition-opacity duration-300" id="drawer-backdrop" onclick="closeDrawer()"></div>
+
+    <!-- Slide-over Drawer Panel -->
+    <aside aria-labelledby="drawer-title" aria-modal="true" class="absolute top-0 right-0 h-full w-full sm:w-[540px] md:w-[600px] bg-white dark:bg-slate-900 sm:border-l border-black/10 dark:border-white/10 shadow-drawer flex flex-col translate-x-full pointer-events-auto z-10 transition-transform duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] overflow-hidden" id="project-drawer" role="dialog">
+      <!-- Cupertino Ambient Header Glow -->
+      <div class="absolute top-0 right-0 w-64 h-64 bg-blue-50/60 dark:bg-blue-600/10 rounded-full blur-3xl pointer-events-none"></div>
+
+      <!-- Top Navigation & Header -->
+      <div class="relative z-10 p-6 md:p-8 pb-4 border-b border-slate-100 dark:border-slate-800 frosted-sheet">
+        <div class="flex items-center justify-between mb-3">
+          <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-blue-50 dark:bg-blue-950/80 border border-blue-100/80 dark:border-blue-800/60 text-[11px] font-semibold text-blue-700 dark:text-blue-300">
+            <span class="w-1.5 h-1.5 rounded-full bg-blue-600 animate-pulse"></span>
+            <span id="drawer-badge-tag">專案研究與案例 (2024–2026)</span>
+          </div>
+          <!-- Cupertino Circular Close Button -->
+          <button class="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-slate-200/90 dark:hover:bg-slate-700 text-slate-500 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white flex items-center justify-center transition-colors focus:outline-none focus:ring-2 focus:ring-slate-400" onclick="closeDrawer()" title="Close Drawer (ESC)" type="button">
+            <i class="ph ph-x text-sm font-bold"></i>
+          </button>
+        </div>
+        <h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white" id="drawer-title">
+          精選專案展示
+        </h2>
+        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-relaxed" id="drawer-subtitle">
+          精選跨領域生醫資訊、空間計算原型與系統工程專案作品。
+        </p>
+
+        <!-- Filter Segmented Control Pills -->
+        <div class="flex items-center gap-1.5 overflow-x-auto pt-4 no-scrollbar">
+          <button class="filter-pill active px-3 py-1.5 rounded-full text-xs font-semibold bg-slate-900 dark:bg-white text-white dark:text-slate-900 transition-all shadow-xs shrink-0" onclick="filterProjects('all', this)" id="filter-all-btn">
+            全部專案 (4)
+          </button>
+          <button class="filter-pill px-3 py-1.5 rounded-full text-xs font-medium bg-slate-100 dark:bg-slate-800 hover:bg-slate-200/80 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 transition-all shrink-0" onclick="filterProjects('spatial', this)" id="filter-spatial-btn">
+            空間計算 / XR
+          </button>
+          <button class="filter-pill px-3 py-1.5 rounded-full text-xs font-medium bg-slate-100 dark:bg-slate-800 hover:bg-slate-200/80 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 transition-all shrink-0" onclick="filterProjects('systems', this)" id="filter-systems-btn">
+            人機互動與系統
+          </button>
+          <button class="filter-pill px-3 py-1.5 rounded-full text-xs font-medium bg-slate-100 dark:bg-slate-800 hover:bg-slate-200/80 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 transition-all shrink-0" onclick="filterProjects('creative', this)" id="filter-creative-btn">
+            創意科技
+          </button>
+        </div>
+      </div>
+
+      <!-- Scrollable Projects List -->
+      <div class="flex-1 overflow-y-auto p-6 md:p-8 space-y-5" id="projects-list">
+        <!-- Project Card 1: Prism Spatial OS -->
+        <article class="project-item rounded-3xl p-5 bg-slate-50/80 dark:bg-slate-800/60 hover:bg-white dark:hover:bg-slate-800 border border-black/5 dark:border-white/10 hover:border-black/10 dark:hover:border-white/20 transition-all duration-200 shadow-xs hover:shadow-md" data-category="spatial">
+          <div class="flex items-start justify-between gap-3 mb-2.5">
+            <div class="flex items-center gap-2">
+              <span class="w-8 h-8 rounded-xl bg-blue-600 text-white flex items-center justify-center shrink-0 shadow-xs">
+                <i class="ph ph-cube-transparent text-base"></i>
+              </span>
+              <div>
+                <h3 class="text-base font-bold text-slate-900 dark:text-white tracking-tight flex items-center gap-2" id="p1-title">
+                  Prism Spatial OS
+                </h3>
+                <span class="text-[11px] font-medium text-blue-600 dark:text-blue-400" id="p1-role">首席產品設計師 • VisionOS 原型設計</span>
+              </div>
+            </div>
+            <span class="text-[10px] font-semibold text-slate-400 dark:text-slate-300 bg-white dark:bg-slate-700 px-2 py-0.5 rounded-full border border-black/5 dark:border-white/10 shrink-0" id="p1-term">
+              2025 春季
+            </span>
+          </div>
+          <p class="text-xs leading-relaxed text-slate-600 dark:text-slate-300 mb-3.5" id="p1-desc">
+            專為大學沈浸式自習空間與協同數位白板設計的空間介面原型。整合手勢追蹤與降噪空間立體視窗管理。
+          </p>
+          <!-- Tags -->
+          <div class="flex flex-wrap gap-1.5 mb-4" id="p1-tags">
+            <span class="text-[10px] font-medium px-2 py-0.5 rounded-md bg-white dark:bg-slate-700 text-slate-600 dark:text-slate-300 border border-black/5 dark:border-white/10">#VisionOS</span>
+            <span class="text-[10px] font-medium px-2 py-0.5 rounded-md bg-white dark:bg-slate-700 text-slate-600 dark:text-slate-300 border border-black/5 dark:border-white/10">#DesignSystems</span>
+            <span class="text-[10px] font-medium px-2 py-0.5 rounded-md bg-white dark:bg-slate-700 text-slate-600 dark:text-slate-300 border border-black/5 dark:border-white/10">#SwiftUI</span>
+            <span class="text-[10px] font-medium px-2 py-0.5 rounded-md bg-white dark:bg-slate-700 text-slate-600 dark:text-slate-300 border border-black/5 dark:border-white/10">#SpatialAudio</span>
+          </div>
+          <!-- Bottom Action & Outcome Bar -->
+          <div class="pt-3 border-t border-slate-200/60 dark:border-slate-700/60 flex items-center justify-between text-xs">
+            <span class="text-[11px] text-slate-500 dark:text-slate-400 flex items-center gap-1">
+              <i class="ph ph-check-circle text-emerald-600 dark:text-emerald-500"></i>
+              <span id="p1-outcome">經 40+ 位學生實測驗證</span>
+            </span>
+            <a class="inline-flex items-center gap-1 font-semibold text-slate-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors" href="#case-study-prism" onclick="event.preventDefault(); alert('Opening Prism Spatial OS interactive prototype & case study deck...');">
+              <span id="p1-case">專案案例</span>
+              <i class="ph ph-arrow-up-right text-xs"></i>
+            </a>
+          </div>
+        </article>
+
+        <!-- Project Card 2: UCLA Campus Pulse -->
+        <article class="project-item rounded-3xl p-5 bg-slate-50/80 dark:bg-slate-800/60 hover:bg-white dark:hover:bg-slate-800 border border-black/5 dark:border-white/10 hover:border-black/10 dark:hover:border-white/20 transition-all duration-200 shadow-xs hover:shadow-md" data-category="systems">
+          <div class="flex items-start justify-between gap-3 mb-2.5">
+            <div class="flex items-center gap-2">
+              <span class="w-8 h-8 rounded-xl bg-slate-900 dark:bg-slate-700 text-white flex items-center justify-center shrink-0 shadow-xs">
+                <i class="ph ph-compass text-base"></i>
+              </span>
+              <div>
+                <h3 class="text-base font-bold text-slate-900 dark:text-white tracking-tight flex items-center gap-2" id="p2-title">
+                  UCLA Campus Pulse
+                </h3>
+                <span class="text-[11px] font-medium text-slate-500 dark:text-slate-400" id="p2-role">使用者體驗架構 • 與 UCLA 學生事務處共同設計</span>
+              </div>
+            </div>
+            <span class="text-[10px] font-semibold text-slate-400 dark:text-slate-300 bg-white dark:bg-slate-700 px-2 py-0.5 rounded-full border border-black/5 dark:border-white/10 shrink-0" id="p2-term">
+              2025 冬季
+            </span>
+          </div>
+          <p class="text-xs leading-relaxed text-slate-600 dark:text-slate-300 mb-3.5" id="p2-desc">
+            即時群眾協作之校園無障礙動線與自習室即時容納導航 App。專門規劃輪椅友善路線與高人流圖書館自習動線。
+          </p>
+          <!-- Tags -->
+          <div class="flex flex-wrap gap-1.5 mb-4" id="p2-tags">
+            <span class="text-[10px] font-medium px-2 py-0.5 rounded-md bg-white dark:bg-slate-700 text-slate-600 dark:text-slate-300 border border-black/5 dark:border-white/10">#MobileDesign</span>
+            <span class="text-[10px] font-medium px-2 py-0.5 rounded-md bg-white dark:bg-slate-700 text-slate-600 dark:text-slate-300 border border-black/5 dark:border-white/10">#UserResearch</span>
+            <span class="text-[10px] font-medium px-2 py-0.5 rounded-md bg-white dark:bg-slate-700 text-slate-600 dark:text-slate-300 border border-black/5 dark:border-white/10">#Figma</span>
+            <span class="text-[10px] font-medium px-2 py-0.5 rounded-md bg-white dark:bg-slate-700 text-slate-600 dark:text-slate-300 border border-black/5 dark:border-white/10">#WCAG2.1</span>
+          </div>
+          <!-- Bottom Action & Outcome Bar -->
+          <div class="pt-3 border-t border-slate-200/60 dark:border-slate-700/60 flex items-center justify-between text-xs">
+            <span class="text-[11px] text-slate-500 dark:text-slate-400 flex items-center gap-1">
+              <i class="ph ph-trophy text-amber-500"></i>
+              <span id="p2-outcome">最佳校園影響力獎 • UCLA Design Hack 2025</span>
+            </span>
+            <a class="inline-flex items-center gap-1 font-semibold text-slate-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors" href="#case-study-pulse" onclick="event.preventDefault(); alert('Opening UCLA Campus Pulse case study...');">
+              <span id="p2-case">專案案例</span>
+              <i class="ph ph-arrow-up-right text-xs"></i>
+            </a>
+          </div>
+        </article>
+
+        <!-- Project Card 3: Tactile Syntax -->
+        <article class="project-item rounded-3xl p-5 bg-slate-50/80 dark:bg-slate-800/60 hover:bg-white dark:hover:bg-slate-800 border border-black/5 dark:border-white/10 hover:border-black/10 dark:hover:border-white/20 transition-all duration-200 shadow-xs hover:shadow-md" data-category="systems">
+          <div class="flex items-start justify-between gap-3 mb-2.5">
+            <div class="flex items-center gap-2">
+              <span class="w-8 h-8 rounded-xl bg-emerald-600 text-white flex items-center justify-center shrink-0 shadow-xs">
+                <i class="ph ph-sliders text-base"></i>
+              </span>
+              <div>
+                <h3 class="text-base font-bold text-slate-900 dark:text-white tracking-tight flex items-center gap-2" id="p3-title">
+                  Tactile Syntax
+                </h3>
+                <span class="text-[11px] font-medium text-emerald-700 dark:text-emerald-400" id="p3-role">系統設計師兼共同開發者</span>
+              </div>
+            </div>
+            <span class="text-[10px] font-semibold text-slate-400 dark:text-slate-300 bg-white dark:bg-slate-700 px-2 py-0.5 rounded-full border border-black/5 dark:border-white/10 shrink-0" id="p3-term">
+              2024 秋季
+            </span>
+          </div>
+          <p class="text-xs leading-relaxed text-slate-600 dark:text-slate-300 mb-3.5" id="p3-desc">
+            模組化實體轉數位之設計代幣（Design Token）同步工具包。將材質觸感參數（重量、粗糙度、圓角）即時轉化為自適應 CSS Tokens 與 Figma 樣式。
+          </p>
+          <!-- Tags -->
+          <div class="flex flex-wrap gap-1.5 mb-4" id="p3-tags">
+            <span class="text-[10px] font-medium px-2 py-0.5 rounded-md bg-white dark:bg-slate-700 text-slate-600 dark:text-slate-300 border border-black/5 dark:border-white/10">#WebComponents</span>
+            <span class="text-[10px] font-medium px-2 py-0.5 rounded-md bg-white dark:bg-slate-700 text-slate-600 dark:text-slate-300 border border-black/5 dark:border-white/10">#DesignOps</span>
+            <span class="text-[10px] font-medium px-2 py-0.5 rounded-md bg-white dark:bg-slate-700 text-slate-600 dark:text-slate-300 border border-black/5 dark:border-white/10">#Tokens</span>
+          </div>
+          <!-- Bottom Action & Outcome Bar -->
+          <div class="pt-3 border-t border-slate-200/60 dark:border-slate-700/60 flex items-center justify-between text-xs">
+            <span class="text-[11px] text-slate-500 dark:text-slate-400 flex items-center gap-1">
+              <i class="ph ph-git-fork text-slate-700 dark:text-slate-300"></i>
+              <span id="p3-outcome">開源專案 • 獲 3 間工作室導入</span>
+            </span>
+            <a class="inline-flex items-center gap-1 font-semibold text-slate-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors" href="#case-study-tactile" onclick="event.preventDefault(); alert('Opening Tactile Syntax documentation repo...');">
+              <span id="p3-case">專案案例</span>
+              <i class="ph ph-arrow-up-right text-xs"></i>
+            </a>
+          </div>
+        </article>
+
+        <!-- Project Card 4: Echo Chamber Archive -->
+        <article class="project-item rounded-3xl p-5 bg-slate-50/80 dark:bg-slate-800/60 hover:bg-white dark:hover:bg-slate-800 border border-black/5 dark:border-white/10 hover:border-black/10 dark:hover:border-white/20 transition-all duration-200 shadow-xs hover:shadow-md" data-category="creative">
+          <div class="flex items-start justify-between gap-3 mb-2.5">
+            <div class="flex items-center gap-2">
+              <span class="w-8 h-8 rounded-xl bg-purple-600 text-white flex items-center justify-center shrink-0 shadow-xs">
+                <i class="ph ph-wave-sine text-base"></i>
+              </span>
+              <div>
+                <h3 class="text-base font-bold text-slate-900 dark:text-white tracking-tight flex items-center gap-2" id="p4-title">
+                  Echo Chamber Archive
+                </h3>
+                <span class="text-[11px] font-medium text-purple-700 dark:text-purple-400" id="p4-role">創意技術專家 • DMA 年度展出</span>
+              </div>
+            </div>
+            <span class="text-[10px] font-semibold text-slate-400 dark:text-slate-300 bg-white dark:bg-slate-700 px-2 py-0.5 rounded-full border border-black/5 dark:border-white/10 shrink-0" id="p4-term">
+              2024 春季
+            </span>
+          </div>
+          <p class="text-xs leading-relaxed text-slate-600 dark:text-slate-300 mb-3.5" id="p4-desc">
+            實驗性影音互動網頁裝置，透過 WebGL 粒子動態場與麥克風頻譜即時運算，探索集體敘事與記憶聲響學。
+          </p>
+          <!-- Tags -->
+          <div class="flex flex-wrap gap-1.5 mb-4" id="p4-tags">
+            <span class="text-[10px] font-medium px-2 py-0.5 rounded-md bg-white dark:bg-slate-700 text-slate-600 dark:text-slate-300 border border-black/5 dark:border-white/10">#ThreeJS</span>
+            <span class="text-[10px] font-medium px-2 py-0.5 rounded-md bg-white dark:bg-slate-700 text-slate-600 dark:text-slate-300 border border-black/5 dark:border-white/10">#WebGL</span>
+            <span class="text-[10px] font-medium px-2 py-0.5 rounded-md bg-white dark:bg-slate-700 text-slate-600 dark:text-slate-300 border border-black/5 dark:border-white/10">#InteractionDesign</span>
+            <span class="text-[10px] font-medium px-2 py-0.5 rounded-md bg-white dark:bg-slate-700 text-slate-600 dark:text-slate-300 border border-black/5 dark:border-white/10">#CreativeCoding</span>
+          </div>
+          <!-- Bottom Action & Outcome Bar -->
+          <div class="pt-3 border-t border-slate-200/60 dark:border-slate-700/60 flex items-center justify-between text-xs">
+            <span class="text-[11px] text-slate-500 dark:text-slate-400 flex items-center gap-1">
+              <i class="ph ph-eye text-indigo-600 dark:text-indigo-400"></i>
+              <span id="p4-outcome">於 UCLA Broad 藝術中心公開展出</span>
+            </span>
+            <a class="inline-flex items-center gap-1 font-semibold text-slate-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors" href="#case-study-echo" onclick="event.preventDefault(); alert('Launching Echo Chamber Live WebGL simulation...');">
+              <span id="p4-case">專案案例</span>
+              <i class="ph ph-arrow-up-right text-xs"></i>
+            </a>
+          </div>
+        </article>
+      </div>
+
+      <!-- Drawer Footer with Quick Contact Callout -->
+      <div class="p-5 md:px-8 border-t border-slate-100 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-900 frosted-sheet flex items-center justify-between">
+        <div class="text-xs text-slate-500 dark:text-slate-400 font-medium" id="drawer-footer-prompt">
+          想深入了解專案細節？
+        </div>
+        <a class="badge-pill inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-xs font-semibold hover:bg-slate-800 dark:hover:bg-slate-100 transition-colors" href="mailto:chirs272686@gmail.com?subject=Project%20Inquiry%20from%20Portfolio">
+          <span id="drawer-schedule-btn">預約專案導覽</span>
+          <i class="ph ph-arrow-right text-xs"></i>
+        </a>
+      </div>
+    </aside>
+  </div>
+
+  <!-- Interactive Logic for Dark Mode, Language Switch, Clipboard & Drawer -->
+  <script>
+    // Bilingual Dictionary
+    const i18nData = {
+      zh: {
+        pageTitle: "張晴宇 (Chang Ching-Yu) • 學生個人品牌名片",
+        statusText: "學習 • 開發 • 實踐",
+        statusBadge: "在線",
+        location: "台灣高雄 • 國立中山大學",
+        copyLabel: "複製",
+        copiedLabel: "已複製！",
+        classBadge: "碩士班 2026",
+        chineseName: "張晴宇",
+        englishName: "Chang Ching-Yu",
+        majorTitle: "醫學科技所 • 生物資訊與計算",
+        projectsBtn: "精選專案",
+        contactBtn: "聯絡我",
+        elevatorPitch: "從醫學檢驗跨域走入計算生物學。具備次世代定序（NGS）生醫資訊專案實戰經驗，目前全力自學鍛鍊資訊工程底層基礎，致力將生物數據轉化為真正落地可用的分析工具與平台。",
+        focusTitle: "核心學術與技術方向",
+        focusDesc: "蛋白質結構預測、微生物分類鑑定平台、抗藥性基因分析、網頁式生物資訊分析工具開發。",
+        skillsHeading: "核心專業與技能標籤",
+        connectHeading: "社群與連結",
+        stat1Val: "5+2",
+        stat1Label: "醫學檢驗背景歷練 (年)",
+        stat2Val: "1",
+        stat2Featured: "精選",
+        stat2View: "查看",
+        stat2Label: "次世代定序生醫專案",
+        stat3Val: "2",
+        stat3Label: "實驗室核心研究方向",
+        stat4Val: "0→1",
+        stat4Label: "程式自學從零到一",
+        footerVerified: "學生個人作品集 • 託管於 GitHub Pages",
+        footerPrinciples: "依據 Cupertino 蘋果設計規範打造",
+        // Drawer
+        drawerBadge: "專案研究與案例 (2024–2026)",
+        drawerTitle: "精選專案展示",
+        drawerSubtitle: "精選跨領域生醫資訊、空間計算原型與系統工程專案作品。",
+        filterAll: "全部專案 (4)",
+        filterSpatial: "空間計算 / XR",
+        filterSystems: "人機互動與系統",
+        filterCreative: "創意科技",
+        p1Title: "Prism Spatial OS",
+        p1Role: "首席產品設計師 • VisionOS 原型設計",
+        p1Term: "2025 春季",
+        p1Desc: "專為大學沈浸式自習空間與協同數位白板設計的空間介面原型。整合手勢追蹤與降噪空間立體視窗管理。",
+        p1Outcome: "經 40+ 位學生實測驗證",
+        p1Case: "專案案例",
+        p2Title: "UCLA Campus Pulse",
+        p2Role: "使用者體驗架構 • 與 UCLA 學生事務處共同設計",
+        p2Term: "2025 冬季",
+        p2Desc: "即時群眾協作之校園無障礙動線與自習室即時容納導航 App。專門規劃輪椅友善路線與高人流圖書館自習動線。",
+        p2Outcome: "最佳校園影響力獎 • UCLA Design Hack 2025",
+        p2Case: "專案案例",
+        p3Title: "Tactile Syntax",
+        p3Role: "系統設計師兼共同開發者",
+        p3Term: "2024 秋季",
+        p3Desc: "模組化實體轉數位之設計代幣（Design Token）同步工具包。將材質觸感參數（重量、粗糙度、圓角）即時轉化為自適應 CSS Tokens 與 Figma 樣式。",
+        p3Outcome: "開源專案 • 獲 3 間工作室導入",
+        p3Case: "專案案例",
+        p4Title: "Echo Chamber Archive",
+        p4Role: "創意技術專家 • DMA 年度展出",
+        p4Term: "2024 春季",
+        p4Desc: "實驗性影音互動網頁裝置，透過 WebGL 粒子動態場與麥克風頻譜即時運算，探索集體敘事與記憶聲響學。",
+        p4Outcome: "於 UCLA Broad 藝術中心公開展出",
+        p4Case: "專案案例",
+        drawerFooterPrompt: "想深入了解專案細節？",
+        drawerSchedule: "預約專案導覽"
+      },
+      en: {
+        pageTitle: "Chang Ching-Yu (張晴宇) • Student Bento Profile",
+        statusText: "Learning • Coding • Building",
+        statusBadge: "Active",
+        location: "Kaohsiung, Taiwan • National Sun Yat-sen University",
+        copyLabel: "Copy",
+        copiedLabel: "Copied!",
+        classBadge: "Graduate Program 2026",
+        chineseName: "張晴宇",
+        englishName: "Chang Ching-Yu",
+        majorTitle: "Medical Science & Technology • Bioinformatics & Computing",
+        projectsBtn: "Featured Projects",
+        contactBtn: "Get in Touch",
+        elevatorPitch: "From clinical laboratory science to computational biology. With hands-on NGS bioinformatics project experience, I am now building a computer science foundation from the ground up, aiming to turn biological data into tools and platforms that people can actually use.",
+        focusTitle: "Core Academic & Technical Focus",
+        focusDesc: "Protein structure prediction, microbial classification platforms, antimicrobial resistance gene analysis, and web-based bioinformatics tooling.",
+        skillsHeading: "Competencies & Methodologies",
+        connectHeading: "Connect & Follow",
+        stat1Val: "5+2",
+        stat1Label: "Years in Medical Lab Science",
+        stat2Val: "1",
+        stat2Featured: "Featured",
+        stat2View: "View",
+        stat2Label: "NGS Research Project",
+        stat3Val: "2",
+        stat3Label: "Lab Research Directions",
+        stat4Val: "0→1",
+        stat4Label: "Coding Journey Started",
+        footerVerified: "Student Portfolio • Hosted on GitHub Pages",
+        footerPrinciples: "Designed with Cupertino Principles",
+        // Drawer
+        drawerBadge: "Case Studies & Research (2024–2026)",
+        drawerTitle: "Featured Projects",
+        drawerSubtitle: "Selected collaborative work, spatial prototypes, and systems engineering completed during academic terms.",
+        filterAll: "All Projects (4)",
+        filterSpatial: "Spatial / XR",
+        filterSystems: "HCI & Systems",
+        filterCreative: "Creative Tech",
+        p1Title: "Prism Spatial OS",
+        p1Role: "Lead Product Designer • VisionOS Prototype",
+        p1Term: "Spring 2025",
+        p1Desc: "A spatial interface prototype designed for ambient university study spaces and cooperative digital whiteboards. Features hand-tracking gestures and sound-dampened volumetric window management.",
+        p1Outcome: "Tested across 40+ student participants",
+        p1Case: "Case Study",
+        p2Title: "UCLA Campus Pulse",
+        p2Role: "UX Architecture • Co-designed with UCLA Student Affairs",
+        p2Term: "Winter 2025",
+        p2Desc: "Real-time crowdsourced campus accessibility & study room occupancy navigation app. Synthesized wayfinding routes for wheelchair users and high-traffic library study hubs.",
+        p2Outcome: "Best Campus Impact • UCLA Design Hack 2025",
+        p2Case: "Case Study",
+        p3Title: "Tactile Syntax",
+        p3Role: "Systems Designer & Co-Creator",
+        p3Term: "Fall 2024",
+        p3Desc: "Modular physical-to-digital design token synchronization toolkit. Translates tactile material parameters (weight, roughness, radius) into adaptive CSS tokens and Figma styles.",
+        p3Outcome: "Open Source • Adopted in 3 DMA studios",
+        p3Case: "Case Study",
+        p4Title: "Echo Chamber Archive",
+        p4Role: "Creative Technologist • DMA Annual Showcase",
+        p4Term: "Spring 2024",
+        p4Desc: "Experimental audio-visual interactive web installation exploring collective storytelling and archival acoustics through WebGL particle fields and microphone spectrum analysis.",
+        p4Outcome: "Exhibited at UCLA Broad Art Center",
+        p4Case: "Case Study",
+        drawerFooterPrompt: "Interested in project walkthroughs?",
+        drawerSchedule: "Schedule Walkthrough"
+      }
+    };
+
+    let currentLang = localStorage.getItem('lang') || 'zh';
+
+    function setLanguage(lang) {
+      currentLang = lang;
+      localStorage.setItem('lang', lang);
+      document.documentElement.lang = (lang === 'zh') ? 'zh-TW' : 'en';
+
+      const data = i18nData[lang];
+      document.title = data.pageTitle;
+
+      // Update text nodes safely
+      const updateEl = (id, val) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = val;
+      };
+
+      updateEl('status-text', data.statusText);
+      updateEl('status-badge', data.statusBadge);
+      updateEl('location-text', data.location);
+      updateEl('copy-label', data.copyLabel);
+      updateEl('copy-phone-label', data.copyLabel);
+      updateEl('badge-class-year', data.classBadge);
+      updateEl('name-zh', data.chineseName);
+      updateEl('name-en', data.englishName);
+      updateEl('major-title', data.majorTitle);
+      updateEl('btn-projects', data.projectsBtn);
+      updateEl('btn-contact', data.contactBtn);
+      updateEl('elevator-pitch', data.elevatorPitch);
+      updateEl('focus-title', data.focusTitle);
+      updateEl('focus-desc', data.focusDesc);
+      updateEl('skills-heading', data.skillsHeading);
+      updateEl('connect-heading', data.connectHeading);
+
+      updateEl('stat1-val', data.stat1Val);
+      updateEl('stat1-label', data.stat1Label);
+      updateEl('stat2-val', data.stat2Val);
+      updateEl('stat2-featured-badge', data.stat2Featured);
+      updateEl('stat2-view-badge', data.stat2View);
+      updateEl('stat2-label', data.stat2Label);
+      updateEl('stat3-val', data.stat3Val);
+      updateEl('stat3-label', data.stat3Label);
+      updateEl('stat4-val', data.stat4Val);
+      updateEl('stat4-label', data.stat4Label);
+
+      updateEl('footer-verified', data.footerVerified);
+      updateEl('footer-principles', data.footerPrinciples);
+
+      // Drawer elements if present
+      updateEl('drawer-badge-tag', data.drawerBadge);
+      updateEl('drawer-title', data.drawerTitle);
+      updateEl('drawer-subtitle', data.drawerSubtitle);
+      updateEl('filter-all-btn', data.filterAll);
+      updateEl('filter-spatial-btn', data.filterSpatial);
+      updateEl('filter-systems-btn', data.filterSystems);
+      updateEl('filter-creative-btn', data.filterCreative);
+
+      updateEl('p1-title', data.p1Title);
+      updateEl('p1-role', data.p1Role);
+      updateEl('p1-term', data.p1Term);
+      updateEl('p1-desc', data.p1Desc);
+      updateEl('p1-outcome', data.p1Outcome);
+      updateEl('p1-case', data.p1Case);
+
+      updateEl('p2-title', data.p2Title);
+      updateEl('p2-role', data.p2Role);
+      updateEl('p2-term', data.p2Term);
+      updateEl('p2-desc', data.p2Desc);
+      updateEl('p2-outcome', data.p2Outcome);
+      updateEl('p2-case', data.p2Case);
+
+      updateEl('p3-title', data.p3Title);
+      updateEl('p3-role', data.p3Role);
+      updateEl('p3-term', data.p3Term);
+      updateEl('p3-desc', data.p3Desc);
+      updateEl('p3-outcome', data.p3Outcome);
+      updateEl('p3-case', data.p3Case);
+
+      updateEl('p4-title', data.p4Title);
+      updateEl('p4-role', data.p4Role);
+      updateEl('p4-term', data.p4Term);
+      updateEl('p4-desc', data.p4Desc);
+      updateEl('p4-outcome', data.p4Outcome);
+      updateEl('p4-case', data.p4Case);
+
+      updateEl('drawer-footer-prompt', data.drawerFooterPrompt);
+      updateEl('drawer-schedule-btn', data.drawerSchedule);
+
+      // Switch language pill styles
+      const zhBtn = document.getElementById('lang-zh-btn');
+      const enBtn = document.getElementById('lang-en-btn');
+      if (zhBtn && enBtn) {
+        if (lang === 'zh') {
+          zhBtn.className = "px-2.5 py-1 rounded-full transition-all duration-200 text-slate-900 dark:text-white bg-white dark:bg-slate-700 shadow-2xs font-bold";
+          enBtn.className = "px-2.5 py-1 rounded-full transition-all duration-200 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white font-medium";
+        } else {
+          enBtn.className = "px-2.5 py-1 rounded-full transition-all duration-200 text-slate-900 dark:text-white bg-white dark:bg-slate-700 shadow-2xs font-bold";
+          zhBtn.className = "px-2.5 py-1 rounded-full transition-all duration-200 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white font-medium";
+        }
+      }
+    }
+
+    // Dark Mode Toggle Logic
+    function updateThemeIcon() {
+      const isDark = document.documentElement.classList.contains('dark');
+      const icon = document.getElementById('theme-icon');
+      if (icon) {
+        if (isDark) {
+          icon.className = 'ph ph-sun text-base text-amber-400';
+        } else {
+          icon.className = 'ph ph-moon text-base text-slate-600';
+        }
+      }
+    }
+
+    function toggleDarkMode() {
+      const isDark = document.documentElement.classList.toggle('dark');
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+      updateThemeIcon();
+    }
+
+    // Initialize Theme & Language on Load
+    document.addEventListener('DOMContentLoaded', () => {
+      setLanguage(currentLang);
+      updateThemeIcon();
+    });
+
+    // Copy Email & Phone with feedback
+    function copyEmail() {
+      const email = document.getElementById('email-text').innerText;
+      navigator.clipboard.writeText(email).then(() => {
+        const statusEl = document.getElementById('copy-status');
+        const originalContent = statusEl.innerHTML;
+        const copiedText = (currentLang === 'zh') ? '已複製！' : 'Copied!';
+        statusEl.innerHTML = `<i class="ph ph-check text-xs text-emerald-600 dark:text-emerald-400"></i><span class="text-emerald-600 dark:text-emerald-400 font-medium">${copiedText}</span>`;
+        setTimeout(() => {
+          statusEl.innerHTML = originalContent;
+        }, 2000);
+      }).catch(err => {
+        console.error('Failed to copy: ', err);
+      });
+    }
+
+    function copyPhone() {
+      const phone = document.getElementById('phone-text').innerText;
+      navigator.clipboard.writeText(phone).then(() => {
+        const statusEl = document.getElementById('copy-phone-status');
+        const originalContent = statusEl.innerHTML;
+        const copiedText = (currentLang === 'zh') ? '已複製！' : 'Copied!';
+        statusEl.innerHTML = `<i class="ph ph-check text-xs text-emerald-600 dark:text-emerald-400"></i><span class="text-emerald-600 dark:text-emerald-400 font-medium">${copiedText}</span>`;
+        setTimeout(() => {
+          statusEl.innerHTML = originalContent;
+        }, 2000);
+      }).catch(err => {
+        console.error('Failed to copy: ', err);
+      });
+    }
+
+    // Cupertino Drawer Open / Close Logic
+    function openDrawer() {
+      const container = document.getElementById('drawer-container');
+      if (!container) return;
+      container.classList.add('drawer-open');
+      container.classList.remove('pointer-events-none');
+      document.body.classList.add('overflow-hidden');
+    }
+
+    function closeDrawer() {
+      const container = document.getElementById('drawer-container');
+      if (!container) return;
+      container.classList.remove('drawer-open');
+      container.classList.add('pointer-events-none');
+      document.body.classList.remove('overflow-hidden');
+    }
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        const container = document.getElementById('drawer-container');
+        if (container && container.classList.contains('drawer-open')) {
+          closeDrawer();
+        }
+      }
+    });
+
+    // Category Filter in Drawer
+    function filterProjects(category, activeBtn) {
+      const isDark = document.documentElement.classList.contains('dark');
+      const buttons = document.querySelectorAll('.filter-pill');
+      buttons.forEach(btn => {
+        btn.classList.remove('bg-slate-900', 'text-white', 'shadow-xs', 'dark:bg-white', 'dark:text-slate-900');
+        btn.classList.add('bg-slate-100', 'text-slate-600', 'dark:bg-slate-800', 'dark:text-slate-300');
+      });
+      activeBtn.classList.remove('bg-slate-100', 'text-slate-600', 'dark:bg-slate-800', 'dark:text-slate-300');
+      activeBtn.classList.add('bg-slate-900', 'text-white', 'shadow-xs', 'dark:bg-white', 'dark:text-slate-900');
+
+      const items = document.querySelectorAll('.project-item');
+      items.forEach(item => {
+        if (category === 'all' || item.getAttribute('data-category') === category) {
+          item.style.display = 'block';
+        } else {
+          item.style.display = 'none';
+        }
+      });
+    }
+  </script>
+</body>
+</html>
